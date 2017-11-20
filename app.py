@@ -1,45 +1,39 @@
-import funciones.Mxlsx as m
-from ejemplo.perceptron import Perceptron
-import funciones.LM as lm
-
-L = m.ReadLog("log.xlsx")
-L.sort(2, 0)
-L.agrupar(2)
-grupos = L.grupos
-Name_partidos = L.titulo[4:18]
-# 0 año, 3 puesto
+"""Proyecto Prediccion de Elecciones."""
+import numpy as np
+import funciones.Values as v
+import funciones.apriori as ap
+from funciones.Mxlsx import ReadLog
+# info del log
+# 2 distrito
+# 3 puesto
 # 4 - 18 partidos
-# 25 distrito, 26 hombre, 27 Mujer
-# inicio 5
+# 19 hombres , 20 mujeres
+# 21 activo , 22 no activo (economia)
+# 23 grado de escolaridad
+# 24 con, 25 sin (religion)
 
 
-Ldistrito = "APODACA"
-puesto = "Senador"
-poblacion = m.ReadLog("poblacion.xlsx").getRows()
-print(poblacion)
+def normalizeData(data):
+    """Normalizar datos para clasificar etiquetas."""
+    # agregar distrito y puesto tal cual
+    aDataNorm = data[:, 2:4]
+    # asignar el ganador de las Elecciones
+    listPartidoKey = np.argmax(data[:, 4:18], axis=1)
+    listpartido = v.getPartido(listPartidoKey)
+    aDataNorm = np.concatenate((aDataNorm, listpartido), axis=1)
+    # asignar genero
+    listGeneroKey = np.argmax(data[:, 19:21], axis=1)
+    listGenero = v.getGenero(listGeneroKey)
+    aDataNorm = np.concatenate((aDataNorm, listGenero), axis=1)
+    # asignar educacion
+    data[:, 23].mean()
+    return aDataNorm
 
-votosXanno = []
-# print(Name_partidos)
-for distrito, votos in grupos.items():
-    if (distrito == Ldistrito):
-        for d in votos:
-            if(d[3] == puesto):
-                votosXanno.append([v if v != "-" else 0 for v in d[4:18]])
-# Creamos el perceptron
-pr = Perceptron(15)  # Perceptron con 3 entradas
-weights = []
-for _ in range(3):
-    for partidos in votosXanno:
-        ganador = max(partidos)
-        output = [a for a, s in enumerate(partidos) if s == ganador][0]
-        p = lm.filtrerForElementM(poblacion, Ldistrito)[2:-3]
-        _input = [elm / sum(partidos) for elm in partidos]
-        genero = 1 if p[0] > p[1] else 0
-        _input += [genero]  # Agregamos un uno por default
-        print("entrada ", _input)
-        weights.append(pr._w)
-        err = pr.train(_input, output)
-        print("error ", err)
-test = []
-# pre = pr.predict()
-# print(pre)
+
+L = ReadLog("doc/logElecciones.xlsx")
+data = np.array(L.filas)
+data = normalizeData(data)
+head = ["", "distrito", "puesto", "partido", "genero"]
+ap.setData(data)
+ap.classifyItems(head)
+ap.getRule()
