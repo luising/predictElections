@@ -25,7 +25,7 @@ def normalizeData(data):
     listGeneroKey = np.argmax(data[:, 19:21], axis=1)
     listGenero = v.getGenero(listGeneroKey)
     aDataNorm = np.concatenate((aDataNorm, listGenero), axis=1)
-    # asignar activa
+    # asignar rangos valores numemerica
     aDataNorm = np.concatenate((aDataNorm, data[:, 21:26]), axis=1)
     return aDataNorm
 
@@ -34,11 +34,12 @@ ListP = ["nan", "nan", "nan", "nan", 50000, 50000, 4, 100000, 12000]
 L = ReadLog("doc/logElecciones.xlsx")
 data = np.array(L.filas)
 data = normalizeData(data)
-
+# nombre de cada columna solo agregar al final
 head = ["", "distrito",
         "puesto", "partido", "genero", "economia activa",
         "economia inactiva", "grado de escolaridad", "con religion",
         "sin religion"]
 ap.setData(data, ListP)
 ap.classifyItems(head)
-ap.getRule()
+# obtener las reglas primer parametro es el soporte segundo es Confianza
+ap.getRule(.15, .20)

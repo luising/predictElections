@@ -1,5 +1,6 @@
 """Clase Apriori."""
 import numpy as np
+from operator import itemgetter
 from apyori import apriori
 
 label = []
@@ -61,7 +62,7 @@ def rangeCategoric(c, v):
 
 
 def showLabel(tlabel):
-    """Mostrar el valor de item."""
+    """Mostrar el valor de la etiqueta."""
     cadena = ""
     for co in tlabel:
         coc = int(co[0])
@@ -94,20 +95,31 @@ def classifyItems(head):
 
 def getRule(uSoporte=0, uConfianza=0):
     """Obtener las Reglas."""
+    # covertir en string las etiquetas
     for i in range(len(label)):
         for j in range(len(label[i])):
             if type(label[i, j]) != str:
                 label[i, j] = str(label[i, j])
-
+    # matriz que guarda reglas,soporte ,confianza
+    reglas = []
+    # obtener combinatoria
     results = list(apriori(label))
     for r in results:
         if(r[1] >= uSoporte):
+            # mostrar  combinatoria
             print(showLabel(list(r[0])), " SOPORTE: ", r[1])
             for rule in r[2]:
                 rule = list(rule)
+                # rule[2] Confianza
                 if(rule[2] >= uConfianza):
+                    trule = showLabel(list(rule[0])) + "-->" + showLabel(list(rule[1]))
+                    # agregar un nueva regla
+                    reglas.append((trule, r[1], rule[2]))
+                    # mostrar regla
                     print("***", showLabel(list(rule[0])),
                           "-->", showLabel(list(rule[1])),
                           "Confianza:", rule[2],
                           "empuje: ", rule[3])
-    print(len(results))
+    reglas = sorted(reglas, key=itemgetter(1, 2))
+    for x in range(len(reglas)):
+        print(reglas[x])
