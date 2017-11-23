@@ -5,7 +5,6 @@ from apyori import apriori
 label = []
 listLabel = []
 Listcategoric = []
-ListP = []
 
 
 def setData(data, ListParameter=0):
@@ -18,8 +17,8 @@ def setData(data, ListParameter=0):
 def rangeNumeric(c, v):
     """Clasificar Numerica."""
     keylist = list()
-    lmin = int(float(min(label[:, c])))
-    lmax = int(float(max(label[:, c])))
+    lmin = int(min(label[:, c]))
+    lmax = int(max(label[:, c]))
     lenR = ListP[c]
     key = 0
     limu = 0
@@ -28,14 +27,22 @@ def rangeNumeric(c, v):
         limA = limB - lenR
         limA = limA + 1 if limA != lmin else limA
         r = label[:, c]
-        label[:, c][(r >= str(limA)) & (r <= str(limB))] = str(c) + str(key)
+        for x in range(len(r)):
+            if type(r[x]) == str:
+                r[x] = int(r[x])
+        clave = str(c) + str(key)
+        label[:, c][(r >= limA) & (r <= limB)] = clave
         key += 1
         limu = limB
         keylist.append(v + "[" + str(limA) + "-" + str(limB) + "]")
         print(" [", limA, "-", limB, "]")
     if limu != lmax:
         r = label[:, c]
-        label[:, c][(r >= str(limu)) & (r <= str(lmax))] = str(c) + str(key)
+        for x in range(len(r)):
+            if type(r[x]) == str:
+                r[x] = int(r[x])
+        clave = str(c) + str(key)
+        label[:, c][(r >= limu) & (r <= lmax)] = clave
         keylist.append(v + "[" + str(limu) + "-" + str(lmax) + "]")
         print(" [", limu, "-", lmax, "]")
     listLabel.append(keylist)
@@ -87,14 +94,20 @@ def classifyItems(head):
 
 def getRule(uSoporte=0, uConfianza=0):
     """Obtener las Reglas."""
+    for i in range(len(label)):
+        for j in range(len(label[i])):
+            if type(label[i, j]) != str:
+                label[i, j] = str(label[i, j])
+
     results = list(apriori(label))
     for r in results:
-        if(r[1] > uSoporte):
+        if(r[1] >= uSoporte):
             print(showLabel(list(r[0])), " SOPORTE: ", r[1])
             for rule in r[2]:
                 rule = list(rule)
-                if(rule[2] > uConfianza):
+                if(rule[2] >= uConfianza):
                     print("***", showLabel(list(rule[0])),
                           "-->", showLabel(list(rule[1])),
                           "Confianza:", rule[2],
                           "empuje: ", rule[3])
+    print(len(results))
