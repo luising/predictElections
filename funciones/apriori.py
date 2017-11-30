@@ -2,6 +2,8 @@
 import numpy as np
 from operator import itemgetter
 from apyori import apriori
+from matplotlib.pylab import hist, show
+from prettytable import PrettyTable
 
 label = []
 listLabel = []
@@ -102,10 +104,23 @@ def getRule(uSoporte=0, uConfianza=0):
                 label[i, j] = str(label[i, j])
     # matriz que guarda reglas,soporte ,confianza
     reglas = []
+    tabla = []
+    tablaReglas = []
+    tablaConfianza = []
     # obtener combinatoria
     results = list(apriori(label))
+    combEstate = 0
     for r in results:
         if(r[1] >= uSoporte):
+            if combEstate != len(list(r[0])):
+                if combEstate != 0:
+                    listConfiance = np.unique(reglas)
+                    hist(reglas, listConfiance)
+                    show()
+                    reglas = []
+                combEstate = len(list(r[0]))
+
+                print("++++++++++++++++++++++++++++")
             # mostrar  combinatoria
             print(showLabel(list(r[0])), " SOPORTE: ", r[1])
             for rule in r[2]:
@@ -113,13 +128,24 @@ def getRule(uSoporte=0, uConfianza=0):
                 # rule[2] Confianza
                 if(rule[2] >= uConfianza):
                     trule = showLabel(list(rule[0])) + "-->" + showLabel(list(rule[1]))
+                    tablaReglas.append(trule)
+                    tablaConfianza.append(rule[2])
                     # agregar un nueva regla
-                    reglas.append((trule, r[1], rule[2]))
+                    reglas.append(rule[2])
                     # mostrar regla
                     print("***", showLabel(list(rule[0])),
                           "-->", showLabel(list(rule[1])),
                           "Confianza:", rule[2],
                           "empuje: ", rule[3])
-    reglas = sorted(reglas, key=itemgetter(1, 2))
-    for x in range(len(reglas)):
-        print(reglas[x])
+    tabla.append(tablaReglas)
+    tabla.append(tablaConfianza)
+    x = PrettyTable()
+    x.field_names = ["Reglas", "Confianza"]
+    for i in range(len(tablaReglas)):
+        x.add_row([tablaReglas[i], tablaConfianza[i]])
+    print(x)
+
+
+    # reglas = sorted(reglas, key=itemgetter(1, 2))
+    # for x in range(len(reglas)):
+    #     print(reglas[x])

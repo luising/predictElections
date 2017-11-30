@@ -3,6 +3,7 @@ import numpy as np
 import funciones.Values as v
 import funciones.apriori as ap
 from funciones.Mxlsx import ReadLog
+
 # info del log
 # 2 distrito
 # 3 puesto
@@ -42,4 +43,4 @@ head = ["", "distrito",
 ap.setData(data, ListP)
 ap.classifyItems(head)
 # obtener las reglas primer parametro es el soporte segundo es Confianza
-ap.getRule(.15, .20)
+ap.getRule()
