@@ -130,6 +130,7 @@ def getRule(uSoporte=0, uConfianza=0):
                     trule = showLabel(list(rule[0])) + "-->" + showLabel(list(rule[1]))
                     tablaReglas.append(trule)
                     tablaConfianza.append(rule[2])
+
                     # agregar un nueva regla
                     reglas.append(rule[2])
                     # mostrar regla
