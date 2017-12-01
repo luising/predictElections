@@ -19,11 +19,11 @@ class ReadLog:
 
     def sort(self, primer, segundo):
         # parametros son las columnas que se van ordenar
-        # Ordenamos las filas en función de el primero y en función del segundo.
+        # Ordenamos las filas en funcion de el primero y en funcion del segundo.
         self.filas.sort(key=itemgetter(primer, segundo))
 
     def agrupar(self, columna):
-        # Agrupamos en función de la columna.
+        # Agrupamos en funcion de la columna.
         self.grupos = {k: list(v) for k, v in groupby(self.filas, itemgetter(columna))}
 
     def getRows(self):
