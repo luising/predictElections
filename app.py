@@ -31,16 +31,23 @@ def normalizeData(data):
     return aDataNorm
 
 
-ListP = ["nan", "nan", "nan", "nan", 50000, 50000, 4, 100000, 12000]
-L = ReadLog("doc/logElecciones.xlsx")
-data = np.array(L.filas)
-data = normalizeData(data)
 # nombre de cada columna solo agregar al final
 head = ["", "distrito",
         "puesto", "partido", "genero", "economia activa",
         "economia inactiva", "grado de escolaridad", "con religion",
         "sin religion"]
+ListP = ["nan", "nan", "nan", "nan", 50000, 50000, 4, 100000, 12000]
+L = ReadLog("doc/logElecciones.xlsx")
+data = np.array(L.filas)
+data = normalizeData(data)
+
 ap.setData(data, ListP)
 ap.classifyItems(head)
 # obtener las reglas primer parametro es el soporte segundo es Confianza
+<<<<<<< HEAD
 ap.getRule()
+=======
+ap.getRule(pVariable="partido")
+ap.showRule()
+ap.showHistogram(1)
+>>>>>>> fbc191aea4730566e5b53e7c385c528fa9617807
