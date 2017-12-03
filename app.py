@@ -3,7 +3,6 @@ import numpy as np
 import funciones.Values as v
 import funciones.apriori as ap
 from funciones.Mxlsx import ReadLog
-
 # info del log
 # 2 distrito
 # 3 puesto
@@ -44,10 +43,5 @@ data = normalizeData(data)
 ap.setData(data, ListP)
 ap.classifyItems(head)
 # obtener las reglas primer parametro es el soporte segundo es Confianza
-<<<<<<< HEAD
-ap.getRule()
-=======
 ap.getRule(pVariable="partido")
 ap.showRule()
-ap.showHistogram(1)
->>>>>>> fbc191aea4730566e5b53e7c385c528fa9617807

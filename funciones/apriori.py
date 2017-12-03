@@ -10,8 +10,6 @@ Listcategoric = []
 listRules = []
 
 
-
-
 def setData(data, ListParameter=0):
     """Asignar data para Apriori."""
     global label, ListP
@@ -110,68 +108,19 @@ def getRule(uSoporte=0, uConfianza=0, pVariable="nan"):
     global listRules
     toStringLabel()
     # matriz que guarda reglas,soporte ,confianza
-<<<<<<< HEAD
-    reglas = []
-    tabla = []
-    tablaReglas = []
-    tablaConfianza = []
-    # obtener combinatoria
-    results = list(apriori(label))
-    combEstate = 0
-    for r in results:
-        if(r[1] >= uSoporte):
-            if combEstate != len(list(r[0])):
-                if combEstate != 0:
-                    listConfiance = np.unique(reglas)
-                    hist(reglas, listConfiance)
-                    show()
-                    reglas = []
-                combEstate = len(list(r[0]))
-
-                print("++++++++++++++++++++++++++++")
-            # mostrar  combinatoria
-            print(showLabel(list(r[0])), " SOPORTE: ", r[1])
-            for rule in r[2]:
-=======
     # obtener combinatoria
     results = list(apriori(label))
     for combinacion in results:
         if(combinacion[1] >= uSoporte):
             for rule in combinacion[2]:
->>>>>>> fbc191aea4730566e5b53e7c385c528fa9617807
                 rule = list(rule)
                 if(rule[2] >= uConfianza):
-<<<<<<< HEAD
-                    trule = showLabel(list(rule[0])) + "-->" + showLabel(list(rule[1]))
-                    tablaReglas.append(trule)
-                    tablaConfianza.append(rule[2])
-
-                    # agregar un nueva regla
-                    reglas.append(rule[2])
-                    # mostrar regla
-                    print("***", showLabel(list(rule[0])),
-                          "-->", showLabel(list(rule[1])),
-                          "Confianza:", rule[2],
-                          "empuje: ", rule[3])
-    tabla.append(tablaReglas)
-    tabla.append(tablaConfianza)
-    x = PrettyTable()
-    x.field_names = ["Reglas", "Confianza"]
-    for i in range(len(tablaReglas)):
-        x.add_row([tablaReglas[i], tablaConfianza[i]])
-    print(x)
-
-
-    # reglas = sorted(reglas, key=itemgetter(1, 2))
-    # for x in range(len(reglas)):
-    #     print(reglas[x])
-=======
                     if pVariable != "nan":
                         rulep2 = showLabel(list(rule[1]))
                         if pVariable in rulep2:
                             # agregar un nueva regla
-                            fRule = (showLabel(list(rule[0])),
-                                     showLabel(list(rule[1])))
+                            fRule = [showLabel(list(rule[0])),
+                                     showLabel(list(rule[1]))]
                             # primer rule , soporte, confianza , empuje
                             ruleDetalle = [fRule, combinacion[1],
                                            rule[2], rule[3]]
@@ -182,7 +131,7 @@ def getRule(uSoporte=0, uConfianza=0, pVariable="nan"):
 def showRule():
     """Mostrar en tabla."""
     global listRules
-    listRules.sort(axis=0)
+    # listRules.sort(axis=0)
     x = PrettyTable()
     x.field_names = ["Reglas", "Soporte", "Confianza", "Empuje"]
     for i in range(len(listRules)):
@@ -202,8 +151,5 @@ def showHistogram(atributo):
     """Mostrar histograma."""
     listAtributo = listRules[:, atributo]
     listAtributodif = np.unique(listAtributo)
-    print(listAtributo)
-    print(len(listAtributodif))
     hist(listAtributo, listAtributodif, rwidth=0.8)
     show()
->>>>>>> fbc191aea4730566e5b53e7c385c528fa9617807
