@@ -1,13 +1,19 @@
 """Clase Apriori."""
 import numpy as np
 from apyori import apriori
-from matplotlib.pylab import hist, show
 from prettytable import PrettyTable
 
 label = []
 listLabel = []
 Listcategoric = []
 listRules = []
+
+
+def getLabel():
+    convList = []
+    for i in label:
+        convList.append(showLabel(i))
+    return convList
 
 
 def setData(data, ListParameter=0):
@@ -126,6 +132,7 @@ def getRule(uSoporte=0, uConfianza=0, pVariable="nan"):
                                            rule[2], rule[3]]
                             listRules.append(ruleDetalle)
     listRules = np.array(listRules)
+    return listRules
 
 
 def showRule():
@@ -145,11 +152,3 @@ def showRule():
     #       "-->", showLabel(list(rule[1])),
     #       "Confianza:", rule[2],
     #       "empuje: ", rule[3]).
-
-
-def showHistogram(atributo):
-    """Mostrar histograma."""
-    listAtributo = listRules[:, atributo]
-    listAtributodif = np.unique(listAtributo)
-    hist(listAtributo, listAtributodif, rwidth=0.8)
-    show()

@@ -4,6 +4,8 @@ import funciones.Values as v
 import funciones.apriori as ap
 from funciones.Mxlsx import ReadLog
 # info del log
+# 0 fecha
+# 1 entidad
 # 2 distrito
 # 3 puesto
 # 4 - 18 partidos
@@ -12,6 +14,9 @@ from funciones.Mxlsx import ReadLog
 # 23 grado de escolaridad
 # 24 con, 25 sin (religion)
 
+def getRuleMatch(aData):
+    if log in rulep2:
+        pass
 
 def normalizeData(data):
     """Normalizar datos para clasificar etiquetas."""
@@ -38,10 +43,21 @@ head = ["", "distrito",
 ListP = ["nan", "nan", "nan", "nan", 50000, 50000, 4, 100000, 12000]
 L = ReadLog("doc/logElecciones.xlsx")
 data = np.array(L.filas)
-data = normalizeData(data)
-
-ap.setData(data, ListP)
+datanorm = normalizeData(data)
+ap.setData(datanorm, ListP)
 ap.classifyItems(head)
 # obtener las reglas primer parametro es el soporte segundo es Confianza
-ap.getRule(pVariable="partido")
+listRules = ap.getRule(.2, .4, pVariable="partido")
 ap.showRule()
+aMaps = {}
+logDate = data[:, 0]
+date = np.unique(logDate)
+ListDistritos = ap.getLabel()
+
+for temp in date:
+    for i, registro in enumerate(logDate):
+        if registro == temp:
+            sData = ListDistritos[i]
+            # aMaps[temp] =
+for r in listRules:
+    print(r[0][0])
