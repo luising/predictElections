@@ -49,15 +49,22 @@ ap.classifyItems(head)
 # obtener las reglas primer parametro es el soporte segundo es Confianza
 listRules = ap.getRule(.2, .4, pVariable="partido")
 ap.showRule()
-aMaps = {}
 logDate = data[:, 0]
 date = np.unique(logDate)
 ListDistritos = ap.getLabel()
-
-for temp in date:
-    for i, registro in enumerate(logDate):
-        if registro == temp:
-            sData = ListDistritos[i]
-            # aMaps[temp] =
-for r in listRules:
-    print(r[0][0])
+rulesG = []
+# for r in listRules:
+#     rulesG.append(r[0][0])
+# for temp in date:
+#     for i, registro in enumerate(logDate):
+#         if registro == temp:
+#             a = ListDistritos[i]
+#             print(type(a))
+#             resultado = []
+#             temporal = []
+#             for elemento in rulesG:
+#                 value = np.intersect1d(np.array(elemento), a)
+#                 if value.size != 0:
+#                     temporal.append(value.tolist())
+#             resultado.append(temporal)
+#             print(resultado)
